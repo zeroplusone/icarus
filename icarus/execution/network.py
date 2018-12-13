@@ -75,7 +75,6 @@ class NetworkView(object):
             raise ValueError('The model argument must be an instance of '
                              'NetworkModel')
         self.model = model
-        pprint(model.content_source)
 
 
     def content_locations(self, k):
