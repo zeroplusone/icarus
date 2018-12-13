@@ -1,0 +1,131 @@
+EXPERIMENT 1/5:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100, rate: 1, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: CCF, network_cache: 0.01
+   * topology -> name: CCF
+   * desc -> Line topology with customized cache
+  RESULTS:
+    LATENCY
+     * MEAN: 3.955
+    LINK_LOAD
+     * MEAN_INTERNAL: 428.012682501
+     * PER_LINK_INTERNAL: Tree({(0, 1): 798.8651837501063, (1, 2): 818.5416661084834, (3, 2): 755.576922561677, (2, 1): 81.85416661084834, (2, 3): 75.5576922561677, (4, 3): 739.8357366749754, (1, 0): 79.88651837501064, (3, 4): 73.98357366749754})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.5075, 4: 0.47})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.0125, 3: 0.01})
+     * MEAN: 0.0225
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.659166666667
+     * MEAN_CONTENT: 0.659166666667
+     * MEAN: 0.659166666667
+
+EXPERIMENT 2/5:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100, rate: 1, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: CCF, network_cache: 0.01
+   * topology -> name: CCF
+   * desc -> Line topology with customized cache
+  RESULTS:
+    LATENCY
+     * MEAN: 3.93
+    LINK_LOAD
+     * MEAN_INTERNAL: 396.249970499
+     * PER_LINK_INTERNAL: Tree({(0, 1): 806.6157160288366, (1, 2): 832.280761538845, (3, 2): 634.2932676044942, (2, 1): 83.2280761538845, (2, 3): 63.42932676044943, (4, 3): 608.6282220944859, (1, 0): 80.66157160288365, (3, 4): 60.86282220944858})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.55, 4: 0.415})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.0175, 3: 0.0175})
+     * MEAN: 0.035
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.655
+     * MEAN_CONTENT: 0.655
+     * MEAN: 0.655
+
+EXPERIMENT 3/5:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100, rate: 1, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: CCF, network_cache: 0.01
+   * topology -> name: CCF
+   * desc -> Line topology with customized cache
+  RESULTS:
+    LATENCY
+     * MEAN: 3.995
+    LINK_LOAD
+     * MEAN_INTERNAL: 379.284148694
+     * PER_LINK_INTERNAL: Tree({(0, 1): 655.9470997998903, (1, 2): 659.3994529567319, (3, 2): 721.5418097798794, (2, 1): 65.93994529567318, (2, 3): 72.15418097798793, (4, 3): 721.5418097798794, (1, 0): 65.59470997998903, (3, 4): 72.15418097798793})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.475, 4: 0.5225})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.0025})
+     * MEAN: 0.0025
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.665833333333
+     * MEAN_CONTENT: 0.665833333333
+     * MEAN: 0.665833333333
+
+EXPERIMENT 4/5:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100, rate: 1, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: CCF, network_cache: 0.01
+   * topology -> name: CCF
+   * desc -> Line topology with customized cache
+  RESULTS:
+    LATENCY
+     * MEAN: 3.975
+    LINK_LOAD
+     * MEAN_INTERNAL: 423.761884137
+     * PER_LINK_INTERNAL: Tree({(0, 1): 744.3090383472276, (1, 2): 759.8154766461281, (3, 2): 790.8283532439293, (2, 1): 75.98154766461282, (2, 3): 79.08283532439293, (4, 3): 786.9517436692041, (1, 0): 74.43090383472276, (3, 4): 78.69517436692041})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.48, 4: 0.5075})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.01, 3: 0.0025})
+     * MEAN: 0.0125
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.6625
+     * MEAN_CONTENT: 0.6625
+     * MEAN: 0.6625
+
+EXPERIMENT 5/5:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100, rate: 1, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: CCF, network_cache: 0.01
+   * topology -> name: CCF
+   * desc -> Line topology with customized cache
+  RESULTS:
+    LATENCY
+     * MEAN: 3.96
+    LINK_LOAD
+     * MEAN_INTERNAL: 381.258420898
+     * PER_LINK_INTERNAL: Tree({(0, 1): 693.1971289062062, (1, 2): 710.7021069088883, (3, 2): 689.6961333056698, (2, 1): 71.07021069088881, (2, 3): 68.96961333056699, (4, 3): 679.1931465040607, (1, 0): 69.31971289062062, (3, 4): 67.91931465040606})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.495, 4: 0.485})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.0125, 3: 0.0075})
+     * MEAN: 0.02
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.66
+     * MEAN_CONTENT: 0.66
+     * MEAN: 0.66
+
+

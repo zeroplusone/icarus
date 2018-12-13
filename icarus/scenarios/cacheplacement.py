@@ -21,6 +21,7 @@ __all__ = [
     'optimal_median_cache_placement',
     'optimal_hashrouting_cache_placement',
     'clustered_hashrouting_cache_placement',
+    'test_cache_placement'
           ]
 
 
@@ -330,3 +331,21 @@ def clustered_hashrouting_cache_placement(topology, cache_budget, n_clusters,
     else:
         raise ValueError('clustering policy %s not supported' % policy)
 
+@register_cache_placement('CCF')
+def test_cache_placement(topology, cache_budget, **kwargs):
+    """Places customized cache budget across cache nodes.
+
+    Parameters
+    ----------
+    topology : Topology
+        The topology object
+    cache_budget : int
+        The cumulative cache budget
+    """
+    icr_candidates = topology.graph['icr_candidates']
+    # cache_size = iround(cache_budget / len(icr_candidates))
+    i=0
+    cache_size_list = [0.1, 0.9]
+    for v in icr_candidates:
+        topology.node[v]['stack'][1]['cache_size'] = cache_size_list[i]
+        i+=1

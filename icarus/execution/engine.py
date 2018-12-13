@@ -70,11 +70,15 @@ def get_ug_provider(workload, view, topology):
     for i in range(len(content_pdf)):
         content_pdf[i] = round(content_pdf[i], 10)
     content_source = view.model.content_source
-    provider_pdf = [0] * len(topology.sources())
+    # print(content_source)
+    # provider_pdf = [0] * len(topology.sources())
+    provider_pdf = {}
     for content, provider in content_source.items():
-        provider_pdf[provider-1] += content_pdf[content-1]
-    print(content_pdf)
-    print(content_source)
+        if not provider_pdf.has_key(provider):
+            provider_pdf[provider] = 0.0
+        provider_pdf[provider] += content_pdf[content-1]
+
+    # print(content_pdf)
     print(provider_pdf)
     
     user_pdf = []
@@ -83,12 +87,12 @@ def get_ug_provider(workload, view, topology):
     else:
         'The user group send request uniformly'
         user_pdf = [1.0/len(topology.receivers())] * len(topology.receivers())
-    print(user_pdf)
+    # print(user_pdf)
 
     user_provider = []
-    for provider in provider_pdf:
+    for provider, ratio in provider_pdf.items():
         tmp_list = []
         for user in user_pdf:
-            tmp_list.append(provider*user)
+            tmp_list.append(ratio * user)
         user_provider.append(tmp_list)
     print(user_provider)

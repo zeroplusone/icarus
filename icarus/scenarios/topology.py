@@ -33,7 +33,8 @@ __all__ = [
         'topology_tiscali',
         'topology_wide',
         'topology_garr',
-        'topology_rocketfuel_latency'
+        'topology_rocketfuel_latency',
+        'topology_ccf'
            ]
 
 
@@ -824,3 +825,36 @@ def topology_rocketfuel_latency(asn, source_ratio=0.1, ext_delay=EXTERNAL_LINK_D
         fnss.add_stack(topology, v, 'router')
     return IcnTopology(topology)
 
+
+@register_topology_factory('CCF')
+def topology_ccf(delay=1, **kwargs):
+    """Return a CCF topology with n source
+
+    Parameters
+    ----------
+    n : int (>=1)
+        The number of source nodes
+    Returns
+    -------
+    topology : IcnTopology
+        The topology object
+    """
+    nodes_num = 5
+    topology = fnss.line_topology(nodes_num)
+    receivers = [2]
+    routers = [1, 3]
+    sources = [0, 4]
+    topology.graph['icr_candidates'] = set(routers)
+    for v in sources:
+        fnss.add_stack(topology, v, 'source')
+    for v in receivers:
+        fnss.add_stack(topology, v, 'receiver')
+    for v in routers:
+        fnss.add_stack(topology, v, 'router')
+    # set weights and delays on all links
+    fnss.set_weights_constant(topology, 1.0)
+    fnss.set_delays_constant(topology, delay, 'ms')
+    # label links as internal or external
+    for u, v in topology.edges():
+        topology.adj[u][v]['type'] = 'internal'
+    return IcnTopology(topology)
