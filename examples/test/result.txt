@@ -1,0 +1,18 @@
+EXPERIMENT 1/1:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 4, rate: 1, n_warmup: 100, beta: 1.0, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: UNIFORM, network_cache: 0.01
+   * topology -> name: TEST, delay: 1, m: 2, n: 2
+   * desc -> Line topology with 10 nodes
+  RESULTS:
+    LATENCY
+     * MEAN: 3.33
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({1: 0.345, 2: 0.32})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({0: 0.335})
+     * MEAN: 0.335
+
+

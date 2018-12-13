@@ -24,6 +24,7 @@ import networkx as nx
 
 from icarus.tools import TruncatedZipfDist
 from icarus.registry import register_workload
+from pprint import pprint
 
 __all__ = [
         'StationaryWorkload',
@@ -91,6 +92,7 @@ class StationaryWorkload(object):
         self.receivers = [v for v in topology.nodes()
                      if topology.node[v]['stack'][0] == 'receiver']
         self.zipf = TruncatedZipfDist(alpha, n_contents)
+        pprint(vars(self.zipf))
         self.n_contents = n_contents
         self.contents = range(1, n_contents + 1)
         self.alpha = alpha
@@ -99,10 +101,22 @@ class StationaryWorkload(object):
         self.n_measured = n_measured
         random.seed(seed)
         self.beta = beta
+        self.topology = topology
+        ug_provider_table = []
         if beta != 0:
             degree = nx.degree(self.topology)
             self.receivers = sorted(self.receivers, key=lambda x: degree[iter(topology.adj[x]).next()], reverse=True)
             self.receiver_dist = TruncatedZipfDist(beta, len(self.receivers))
+            pprint(vars(self.receiver_dist))
+            for provider in range(len(self.receiver_dist._pdf)):
+                tmp_list = []
+                for ug in range(len(self.zipf._pdf)):
+                    tmp_list.append(self.receiver_dist._pdf[provider]*self.zipf._pdf[ug])
+                ug_provider_table.append(tmp_list)
+        else:
+            ug_provider_table = self.zipf._pdf[:]
+            print(ug_provider_table)
+            
 
     def __iter__(self):
         req_counter = 0

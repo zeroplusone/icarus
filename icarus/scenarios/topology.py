@@ -17,6 +17,7 @@ from os import path
 
 import networkx as nx
 import fnss
+from fnss.topologies.topology import Topology, DirectedTopology
 
 from icarus.registry import register_topology_factory
 
@@ -25,6 +26,7 @@ __all__ = [
         'IcnTopology',
         'topology_tree',
         'topology_path',
+        'topology_test',
         'topology_ring',
         'topology_mesh',
         'topology_geant',
@@ -192,6 +194,43 @@ def topology_path(n, delay=1, **kwargs):
         topology.adj[u][v]['type'] = 'internal'
     return IcnTopology(topology)
 
+@register_topology_factory('TEST')
+def topology_test(n=2, m=2, delay=1, **kwargs):
+    """Return a star topology with a router on node `0` and n source at node
+    '1' to 'n' and m receiver at node 'n+1' to 'n+m'
+
+    Parameters
+    ----------
+    n : int (>=1)
+        The number of source nodes
+    m : int (>=1)
+        The number of receiver nodes
+    delay : float
+        The link delay in milliseconds
+
+    Returns
+    -------
+    topology : IcnTopology
+        The topology object
+    """
+    topology = fnss.star_topology(n+m)
+    receivers = range(n+1, n+m+1)
+    routers = [0]
+    sources = range(1, n+1)
+    topology.graph['icr_candidates'] = set(routers)
+    for v in sources:
+        fnss.add_stack(topology, v, 'source')
+    for v in receivers:
+        fnss.add_stack(topology, v, 'receiver')
+    for v in routers:
+        fnss.add_stack(topology, v, 'router')
+    # set weights and delays on all links
+    fnss.set_weights_constant(topology, 1.0)
+    fnss.set_delays_constant(topology, delay, 'ms')
+    # label links as internal or external
+    for u, v in topology.edges():
+        topology.adj[u][v]['type'] = 'internal'
+    return IcnTopology(topology)
 
 @register_topology_factory('RING')
 def topology_ring(n, delay_int=1, delay_ext=5, **kwargs):
