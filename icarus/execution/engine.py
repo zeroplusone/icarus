@@ -7,6 +7,7 @@ and providing them to a strategy instance.
 """
 from icarus.execution import NetworkModel, NetworkView, NetworkController, CollectorProxy
 from icarus.registry import DATA_COLLECTOR, STRATEGY
+from pprint import pprint
 
 
 __all__ = ['exec_experiment']
@@ -57,5 +58,7 @@ def exec_experiment(topology, workload, netconf, strategy, cache_policy, collect
     strategy_inst = STRATEGY[strategy_name](view, controller, **strategy_args)
 
     for time, event in workload:
+        print(time)
+        pprint(event)
         strategy_inst.process_event(time, **event)
     return collector.results()

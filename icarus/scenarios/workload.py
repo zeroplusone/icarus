@@ -115,7 +115,7 @@ class StationaryWorkload(object):
                 ug_provider_table.append(tmp_list)
         else:
             ug_provider_table = self.zipf._pdf[:]
-            print(ug_provider_table)
+        print(ug_provider_table)
             
 
     def __iter__(self):

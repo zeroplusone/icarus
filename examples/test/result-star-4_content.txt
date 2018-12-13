@@ -1,0 +1,27 @@
+EXPERIMENT 1/1:
+  CONFIGURATION:
+   * workload -> name: STATIONARY, n_contents: 4, rate: 1, n_warmup: 100, beta: 1.0, n_measured: 400, alpha: 1.0
+   * cache_policy -> name: LRU
+   * strategy -> name: LCE
+   * content_placement -> name: UNIFORM
+   * cache_placement -> name: UNIFORM, network_cache: 0.01
+   * topology -> name: TEST, delay: 1, m: 2, n: 2
+   * desc -> Line topology with 10 nodes
+  RESULTS:
+    LATENCY
+     * MEAN: 3.29
+    LINK_LOAD
+     * MEAN_INTERNAL: 308.818104066
+     * PER_LINK_INTERNAL: Tree({(0, 1): 55.29542178351147, (3, 0): 90.11105772127794, (0, 2): 32.76765735319198, (2, 0): 327.6765735319198, (0, 4): 464.20847917021973, (1, 0): 552.9542178351147, (0, 3): 901.1105772127795, (4, 0): 46.42084791702197})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
+    CACHE_HIT_RATIO
+     * PER_NODE_SERVER_HIT_RATIO: Tree({1: 0.405, 2: 0.24})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({0: 0.355})
+     * MEAN: 0.355
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.548333333333
+     * MEAN_CONTENT: 0.548333333333
+     * MEAN: 0.548333333333
+
+[[0.32000000000000006, 0.16000000000000003, 0.10666666666666666, 0.08000000000000002], [0.16000000000000003, 0.08000000000000002, 0.05333333333333333, 0.04000000000000001]]

@@ -24,6 +24,7 @@ __all__ = [
     'LinkLoadCollector',
     'LatencyCollector',
     'PathStretchCollector',
+    'DemandCollector',
     'DummyCollector'
            ]
 
@@ -499,6 +500,26 @@ class PathStretchCollector(DataCollector):
             results['CDF_CONTENT'] = cdf(self.cont_stretch_data)
         return results
 
+@register_data_collector('DEMAND')
+class DemandCollector(DataCollector):
+    """Collector calculate the table between user group and provider with the information about content location
+    """ 
+    def __init__(self, view):
+        """Constructor
+
+        Parameters
+        ----------
+        view : NetworkView
+            The network view instance
+        output : stream
+            Stream on which debug collector writes
+        """
+        self.view = view
+
+    @inheritdoc(DataCollector)
+    def results(self):
+        results = Tree({'CONTENT_SOURCE': self.view.model.content_source})
+        return results
 
 @register_data_collector('DUMMY')
 class DummyCollector(DataCollector):

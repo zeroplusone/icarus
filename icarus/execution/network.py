@@ -19,7 +19,7 @@ import fnss
 
 from icarus.registry import CACHE_POLICY
 from icarus.util import path_links, iround
-
+from pprint import pprint
 __all__ = [
     'NetworkModel',
     'NetworkView',
@@ -75,6 +75,8 @@ class NetworkView(object):
             raise ValueError('The model argument must be an instance of '
                              'NetworkModel')
         self.model = model
+        pprint(model.content_source)
+
 
     def content_locations(self, k):
         """Return a set of all current locations of a specific content.

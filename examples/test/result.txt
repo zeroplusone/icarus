@@ -6,13 +6,23 @@ EXPERIMENT 1/1:
    * content_placement -> name: UNIFORM
    * cache_placement -> name: UNIFORM, network_cache: 0.01
    * topology -> name: TEST, delay: 1, m: 2, n: 2
-   * desc -> Line topology with 10 nodes
   RESULTS:
     LATENCY
-     * MEAN: 3.33
+     * MEAN: 3.375
+    LINK_LOAD
+     * MEAN_INTERNAL: 350.423999568
+     * PER_LINK_INTERNAL: Tree({(0, 1): 37.75612116556846, (3, 0): 100.4312823004121, (0, 2): 66.0732120397448, (2, 0): 660.7321203974479, (0, 4): 505.93202361861734, (1, 0): 377.5612116556846, (0, 3): 1004.3128230041209, (4, 0): 50.593202361861735})
+     * MEAN_EXTERNAL: 0
+     * PER_LINK_EXTERNAL: Tree({})
     CACHE_HIT_RATIO
-     * PER_NODE_SERVER_HIT_RATIO: Tree({1: 0.345, 2: 0.32})
-     * PER_NODE_CACHE_HIT_RATIO: Tree({0: 0.335})
-     * MEAN: 0.335
+     * PER_NODE_SERVER_HIT_RATIO: Tree({1: 0.25, 2: 0.4375})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({0: 0.3125})
+     * MEAN: 0.3125
+    PATH_STRETCH
+     * MEAN_REQUEST: 0.5625
+     * MEAN_CONTENT: 0.5625
+     * MEAN: 0.5625
+    DEMAND
+     * CONTENT_SOURCE: Tree({1: 1, 2: 2, 3: 2, 4: 2})
 
 
