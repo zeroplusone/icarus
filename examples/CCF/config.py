@@ -40,12 +40,17 @@ EXPERIMENT_QUEUE = deque()
 # Create experiment
 experiment = Tree()
 
-# CCF source number
-source_number = 3
+# CCF settings 
+source_number = 4
+IS_BASELINE = True
+# If True, read workload and content placement from data 
+READ_FROM_DATA = False
 
 # Set topology
-# experiment['topology']['name'] = 'CCF_SCALE'
-experiment['topology']['name'] = 'BASELINE'
+if IS_BASELINE:
+        experiment['topology']['name'] = 'BASELINE'
+else:
+        experiment['topology']['name'] = 'CCF_SCALE'
 experiment['topology']['n'] = source_number
 # experiment['topology']['delay'] = 1
 
@@ -53,28 +58,29 @@ experiment['topology']['n'] = source_number
 # Set workload
 experiment['workload'] = {
          'name':       'STATIONARY',
-         'n_contents': 4,
-         'n_warmup':   10 ** 2,
-         'n_measured': 4 * 10 ** 2,
+         'n_contents': 10 ** 5,
+         'n_warmup':   10 ** 5,
+         'n_measured': 2 * 10 ** 5,
          'alpha':      1.0,
          'rate':       1
         }
 
 # Set cache placement
-# experiment['cache_placement']['name'] = 'CCF'
-# experiment['cache_placement']['network_cache'] = 0.0
-# experiment['cache_placement']['cache_allocation'] = [0.9, 0.1]
-experiment['cache_placement']['name'] = 'UNIFORM'
-experiment['cache_placement']['network_cache'] = 0.0
-
+if IS_BASELINE:
+        experiment['cache_placement']['name'] = 'UNIFORM'
+else:
+        experiment['cache_placement']['name'] = 'CCF'
+        experiment['cache_placement']['cache_allocation'] = [0.1, 0.3, 0.5, 0.1]
+experiment['cache_placement']['network_cache'] = 0.01
 
 # Set content placement
-# experiment['content_placement']['name'] = 'UNIFORM'
-experiment['content_placement']['name'] = 'DATA_TO_CCF'
-experiment['content_placement']['n'] = source_number
-
-# If True, read workload and content placement from data 
-READ_FROM_DATA = False
+if READ_FROM_DATA:
+        experiment['content_placement']['name'] = 'DATA_TO_CCF'
+        experiment['content_placement']['n'] = source_number
+else:
+        # experiment['content_placement']['name'] = 'UNIFORM'
+        experiment['content_placement']['name'] = 'WEIGHTED'
+        experiment['content_placement']['source_weights'] = {2: 0.5, 3: 0.15, 4: 0.1, 5: 0.25}
 
 # Set cache replacement policy
 experiment['cache_policy']['name'] = 'LRU'
@@ -83,6 +89,7 @@ experiment['cache_policy']['name'] = 'LRU'
 experiment['strategy']['name'] = 'LCE'
 
 # Description of the experiment
+
 experiment['desc'] = "Line topology with customized cache"
 
 # Append experiment to queue

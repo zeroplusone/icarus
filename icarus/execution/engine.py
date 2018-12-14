@@ -57,11 +57,10 @@ def exec_experiment(topology, workload, netconf, strategy, cache_policy, collect
     strategy_args = {k: v for k, v in strategy.items() if k != 'name'}
     strategy_inst = STRATEGY[strategy_name](view, controller, **strategy_args)
 
-    get_ug_provider(workload, view, topology)
-
     if read_from_data:
-        with open ('outfile', 'rb') as fp:
+        with open ('record_workload', 'rb') as fp:
             record_workload = pickle.load(fp)
+        get_ug_provider(record_workload, view, topology, read_from_data)
         for record_event in record_workload:
             time=record_event[0]
             event=record_event[1]
@@ -70,44 +69,64 @@ def exec_experiment(topology, workload, netconf, strategy, cache_policy, collect
             strategy_inst.process_event(time, **event)
     else:
         record_workload = []
+        get_ug_provider(workload, view, topology, read_from_data)
         for time, event in workload:
             # print(time)
             # pprint(event)
             record_workload.append([time, event])
             strategy_inst.process_event(time, **event)
-        with open('outfile', 'wb') as fp:
+        with open('record_workload', 'wb') as fp:
             pickle.dump(record_workload, fp)
     return collector.results()
 
-def get_ug_provider(workload, view, topology):
-    content_pdf = workload.zipf._pdf
+def get_ug_provider(workload, view, topology, read_from_data):
+    if read_from_data:
+        with open ('record_workload_pdf', 'rb') as fp:
+            content_pdf = pickle.load(fp)
+        n_source = len(topology.sources())
+    else:
+        content_pdf = workload.zipf._pdf
+        with open('record_workload_pdf', 'wb') as fp:
+            pickle.dump(content_pdf, fp)
+
     "remove the weird additional digits ex. 0.32000000000006  (remove 6)"
     for i in range(len(content_pdf)):
         content_pdf[i] = round(content_pdf[i], 10)
     content_source = view.model.content_source
     # print(content_source)
     # provider_pdf = [0] * len(topology.sources())
-    provider_pdf = {}
+    provider_pdf = {}      
     for content, provider in content_source.items():
+        if read_from_data:
+            provider = provider + n_source - 1
         if not provider_pdf.has_key(provider):
             provider_pdf[provider] = 0.0
         provider_pdf[provider] += content_pdf[content-1]
 
     # print(content_pdf)
-    print(provider_pdf)
+    # print(provider_pdf)
     
-    user_pdf = []
-    if workload.beta != 0:
-        user_pdf = workload.receiver_dist._pdf
-    else:
-        'The user group send request uniformly'
-        user_pdf = [1.0/len(topology.receivers())] * len(topology.receivers())
-    # print(user_pdf)
 
     user_provider = []
     for provider, ratio in provider_pdf.items():
-        tmp_list = []
-        for user in user_pdf:
-            tmp_list.append(ratio * user)
-        user_provider.append(tmp_list)
+        user_provider.append(ratio)
     print(user_provider)
+    with open('provider_popularity', 'wb') as fp:
+        pickle.dump(user_provider, fp)
+
+    ''' for multiple user group '''
+    # user_pdf = []
+    # if workload.beta != 0:
+    #     user_pdf = workload.receiver_dist._pdf
+    # else:
+    #     'The user group send request uniformly'
+    #     user_pdf = [1.0/len(topology.receivers())] * len(topology.receivers())
+    # print(user_pdf)
+    
+    # user_provider = []
+    # for provider, ratio in provider_pdf.items():
+    #     tmp_list = []
+    #     for user in user_pdf:
+    #         tmp_list.append(ratio * user)
+    #     user_provider.append(tmp_list)
+    # print(user_provider)

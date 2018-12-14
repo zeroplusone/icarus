@@ -59,7 +59,7 @@ def uniform_content_placement(topology, contents, seed=None):
     content_placement = collections.defaultdict(set)
     for c in contents:
         content_placement[random.choice(source_nodes)].add(c)
-    with open('outfile_content', 'wb') as fp:
+    with open('record_content', 'wb') as fp:
         pickle.dump(content_placement, fp)
     apply_content_placement(content_placement, topology)
 
@@ -87,7 +87,7 @@ def content_placement_from_data (topology, contents, n, seed=None):
     achieved by using a fix seed value
     """
 
-    with open ('outfile_content', 'rb') as fp:
+    with open ('record_content', 'rb') as fp:
         content_placement = pickle.load(fp)
     content_placement_shiftnode = {}
     for key, value in content_placement.items():
@@ -125,4 +125,6 @@ def weighted_content_placement(topology, contents, source_weights, seed=None):
     content_placement = collections.defaultdict(set)
     for c in contents:
         content_placement[random_from_pdf(source_pdf)].add(c)
+    with open('record_content', 'wb') as fp:
+        pickle.dump(content_placement, fp)
     apply_content_placement(content_placement, topology)

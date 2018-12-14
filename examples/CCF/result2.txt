@@ -1,27 +1,27 @@
 EXPERIMENT 1/1:
   CONFIGURATION:
-   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100, rate: 1, n_measured: 400, alpha: 1.0
+   * workload -> name: STATIONARY, n_contents: 100000, n_warmup: 100000, rate: 1, n_measured: 200000, alpha: 1.0
    * cache_policy -> name: LRU
    * strategy -> name: LCE
-   * content_placement -> name: UNIFORM
-   * cache_placement -> name: CCF, network_cache: 0.01
-   * topology -> name: CCF
+   * content_placement -> name: DATA_TO_CCF, n: 4
+   * cache_placement -> name: CCF, network_cache: 0.1, cache_allocation: [0.4865619272999974, 0.1376484364999995, 0.1243894495000001, 0.25140019029999827]
+   * topology -> name: CCF_SCALE, n: 4
    * desc -> Line topology with customized cache
   RESULTS:
     LATENCY
-     * MEAN: 3.965
+     * MEAN: 2.52903
     LINK_LOAD
-     * MEAN_INTERNAL: 389.720367145
-     * PER_LINK_INTERNAL: Tree({(0, 1): 675.5212600294516, (1, 2): 686.2438197124587, (3, 2): 743.430804688497, (2, 1): 68.62438197124587, (2, 3): 74.34308046884969, (4, 3): 729.1340584444874, (1, 0): 67.55212600294516, (3, 4): 72.91340584444875})
+     * MEAN_INTERNAL: 130.640838754
+     * PER_LINK_INTERNAL: Tree({(0, 1): 79.69978106099045, (7, 3): 33.9092051632602, (2, 6): 5.976375312842269, (3, 7): 3.3909205163260197, (4, 8): 10.192297098152551, (3, 0): 147.21539037530624, (0, 2): 21.460552135453973, (1, 5): 20.189990071836135, (6, 2): 59.76375312842269, (8, 4): 101.9229709815255, (0, 4): 34.39158295441493, (5, 1): 201.89990071836135, (1, 0): 796.9978106099045, (2, 0): 214.60552135453972, (0, 3): 14.721539037530624, (4, 0): 343.9158295441493})
      * MEAN_EXTERNAL: 0
      * PER_LINK_EXTERNAL: Tree({})
     CACHE_HIT_RATIO
-     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.4725, 4: 0.51})
-     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.0075, 3: 0.01})
-     * MEAN: 0.0175
+     * PER_NODE_SERVER_HIT_RATIO: Tree({8: 0.067825, 5: 0.134355, 6: 0.03977, 7: 0.022565})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.39601, 2: 0.10304, 3: 0.0754, 4: 0.161035})
+     * MEAN: 0.735485
     PATH_STRETCH
-     * MEAN_REQUEST: 0.660833333333
-     * MEAN_CONTENT: 0.660833333333
-     * MEAN: 0.660833333333
+     * MEAN_REQUEST: 0.421505
+     * MEAN_CONTENT: 0.421505
+     * MEAN: 0.421505
 
 
