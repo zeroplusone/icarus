@@ -77,7 +77,7 @@ if READ_FROM_DATA:
 else:
         # experiment['content_placement']['name'] = 'UNIFORM'
         experiment['content_placement']['name'] = 'WEIGHTED'
-        experiment['content_placement']['source_weights'] = {2: 0.5, 3: 0.15, 4: 0.1, 5: 0.25}
+        experiment['content_placement']['source_weights'] = {5: 0.5, 6: 0.15, 7: 0.1, 8: 0.25}
 
 # Set cache replacement policy
 experiment['cache_policy']['name'] = 'LRU'
