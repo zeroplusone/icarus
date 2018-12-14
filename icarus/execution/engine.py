@@ -13,7 +13,7 @@ import pickle
 __all__ = ['exec_experiment']
 
 
-def exec_experiment(topology, workload, netconf, strategy, cache_policy, collectors):
+def exec_experiment(topology, workload, netconf, strategy, cache_policy, collectors, read_from_data):
     """Execute the simulation of a specific scenario.
 
     Parameters
@@ -58,24 +58,25 @@ def exec_experiment(topology, workload, netconf, strategy, cache_policy, collect
     strategy_inst = STRATEGY[strategy_name](view, controller, **strategy_args)
 
     get_ug_provider(workload, view, topology)
-    # record_workload = []
-    # for time, event in workload:
-    #     print(time)
-    #     pprint(event)
-    #     record_workload.append([time, event])
-    #     # strategy_inst.process_event(time, **event)
-    # print("********************")
-    # print(record_workload)
-    # with open('outfile', 'wb') as fp:
-    #     pickle.dump(record_workload, fp)
-    with open ('outfile', 'rb') as fp:
-        record_workload = pickle.load(fp)
-    for record_event in record_workload:
-        time=record_event[0]
-        event=record_event[1]
-        print(time)
-        pprint(event)
-        strategy_inst.process_event(time, **event)
+
+    if read_from_data:
+        with open ('outfile', 'rb') as fp:
+            record_workload = pickle.load(fp)
+        for record_event in record_workload:
+            time=record_event[0]
+            event=record_event[1]
+            print(time)
+            pprint(event)
+            strategy_inst.process_event(time, **event)
+    else:
+        record_workload = []
+        for time, event in workload:
+            print(time)
+            pprint(event)
+            record_workload.append([time, event])
+            strategy_inst.process_event(time, **event)
+        with open('outfile', 'wb') as fp:
+            pickle.dump(record_workload, fp)
     return collector.results()
 
 def get_ug_provider(workload, view, topology):

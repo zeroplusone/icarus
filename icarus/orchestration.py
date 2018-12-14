@@ -275,7 +275,7 @@ def run_scenario(settings, params, curr_exp, n_exp):
         collectors = {m: {} for m in metrics}
 
         logger.info('Experiment %d/%d | Start simulation', curr_exp, n_exp)
-        results = exec_experiment(topology, workload, netconf, strategy, cache_policy, collectors)
+        results = exec_experiment(topology, workload, netconf, strategy, cache_policy, collectors, settings.READ_FROM_DATA)
 
         duration = time.time() - start_time
         logger.info('Experiment %d/%d | End simulation | Duration %s.',

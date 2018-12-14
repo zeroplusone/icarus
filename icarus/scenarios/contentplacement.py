@@ -54,17 +54,42 @@ def uniform_content_placement(topology, contents, seed=None):
     A deterministic placement of objects (e.g., for reproducing results) can be
     achieved by using a fix seed value
     """
-    # random.seed(seed)
-    # source_nodes = get_sources(topology)
-    # content_placement = collections.defaultdict(set)
-    # for c in contents:
-    #     content_placement[random.choice(source_nodes)].add(c)
-    # with open('outfile_content', 'wb') as fp:
-    #     pickle.dump(content_placement, fp)
+    random.seed(seed)
+    source_nodes = get_sources(topology)
+    content_placement = collections.defaultdict(set)
+    for c in contents:
+        content_placement[random.choice(source_nodes)].add(c)
+    with open('outfile_content', 'wb') as fp:
+        pickle.dump(content_placement, fp)
+    apply_content_placement(content_placement, topology)
+
+@register_content_placement('DATA')
+def content_placement_from_data (topology, contents, seed=None):
+    """Places content objects to source nodes according to data 'outfile_content'.
+
+    Parameters
+    ----------
+    topology : Topology
+        The topology object
+    contents : iterable
+        Iterable of content objects
+    source_nodes : list
+        List of nodes of the topology which are content sources
+
+    Returns
+    -------
+    cache_placement : dict
+        Dictionary mapping content objects to source nodes
+
+    Notes
+    -----
+    A deterministic placement of objects (e.g., for reproducing results) can be
+    achieved by using a fix seed value
+    """
+
     with open ('outfile_content', 'rb') as fp:
         content_placement = pickle.load(fp)
     apply_content_placement(content_placement, topology)
-
 
 @register_content_placement('WEIGHTED')
 def weighted_content_placement(topology, contents, source_weights, seed=None):

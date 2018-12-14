@@ -37,6 +37,9 @@ DATA_COLLECTORS = ['CACHE_HIT_RATIO', 'LATENCY', 'PATH_STRETCH', 'LINK_LOAD']
 # Queue of experiments
 EXPERIMENT_QUEUE = deque()
 
+# If True, read workload and content placement from data 
+READ_FROM_DATA = True
+
 # Create experiment
 experiment = Tree()
 
@@ -61,7 +64,7 @@ experiment['cache_placement']['name'] = 'CCF'
 experiment['cache_placement']['network_cache'] = 0.01
 
 # Set content placement
-experiment['content_placement']['name'] = 'UNIFORM'
+experiment['content_placement']['name'] = 'DATA'
 
 # Set cache replacement policy
 experiment['cache_policy']['name'] = 'LRU'
