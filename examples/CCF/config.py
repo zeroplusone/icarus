@@ -61,7 +61,8 @@ experiment['workload'] = {
 
 # Set cache placement
 experiment['cache_placement']['name'] = 'CCF'
-experiment['cache_placement']['network_cache'] = 0.01
+experiment['cache_placement']['network_cache'] = 0.001
+experiment['cache_placement']['cache_allocation'] = [0.9, 0.1]
 
 # Set content placement
 experiment['content_placement']['name'] = 'DATA'

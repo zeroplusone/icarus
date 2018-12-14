@@ -65,14 +65,14 @@ def exec_experiment(topology, workload, netconf, strategy, cache_policy, collect
         for record_event in record_workload:
             time=record_event[0]
             event=record_event[1]
-            print(time)
-            pprint(event)
+            # print(time)
+            # pprint(event)
             strategy_inst.process_event(time, **event)
     else:
         record_workload = []
         for time, event in workload:
-            print(time)
-            pprint(event)
+            # print(time)
+            # pprint(event)
             record_workload.append([time, event])
             strategy_inst.process_event(time, **event)
         with open('outfile', 'wb') as fp:

@@ -4,24 +4,24 @@ EXPERIMENT 1/1:
    * cache_policy -> name: LRU
    * strategy -> name: LCE
    * content_placement -> name: DATA
-   * cache_placement -> name: CCF, network_cache: 0.01
+   * cache_placement -> name: CCF, network_cache: 0.001, cache_allocation: [0.9, 0.1]
    * topology -> name: CCF
    * desc -> Line topology with customized cache
   RESULTS:
     LATENCY
-     * MEAN: 3.965
+     * MEAN: 3.47
     LINK_LOAD
-     * MEAN_INTERNAL: 426.279399056
-     * PER_LINK_INTERNAL: Tree({(0, 1): 785.8045095516488, (1, 2): 789.7139847235476, (3, 2): 774.0760840359526, (2, 1): 78.97139847235476, (2, 3): 77.40760840359526, (4, 3): 750.6192330045601, (1, 0): 78.58045095516488, (3, 4): 75.06192330045602})
+     * MEAN_INTERNAL: 373.061668278
+     * PER_LINK_INTERNAL: Tree({(0, 1): 519.9601978625338, (1, 2): 789.7139847235476, (3, 2): 774.0760840359526, (2, 1): 78.97139847235476, (2, 3): 77.40760840359526, (4, 3): 629.4255026756988, (1, 0): 51.996019786253385, (3, 4): 62.942550267569885})
      * MEAN_EXTERNAL: 0
      * PER_LINK_EXTERNAL: Tree({})
     CACHE_HIT_RATIO
-     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.5025, 4: 0.48})
-     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.0025, 3: 0.015})
-     * MEAN: 0.0175
+     * PER_NODE_SERVER_HIT_RATIO: Tree({0: 0.3325, 4: 0.4025})
+     * PER_NODE_CACHE_HIT_RATIO: Tree({1: 0.1725, 3: 0.0925})
+     * MEAN: 0.265
     PATH_STRETCH
-     * MEAN_REQUEST: 0.660833333333
-     * MEAN_CONTENT: 0.660833333333
-     * MEAN: 0.660833333333
+     * MEAN_REQUEST: 0.578333333333
+     * MEAN_CONTENT: 0.578333333333
+     * MEAN: 0.578333333333
 
 
