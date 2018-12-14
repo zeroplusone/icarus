@@ -89,10 +89,7 @@ def content_placement_from_data (topology, contents, n, seed=None):
 
     with open ('record_content', 'rb') as fp:
         content_placement = pickle.load(fp)
-    content_placement_shiftnode = {}
-    for key, value in content_placement.items():
-        content_placement_shiftnode[key+n-1] = value
-    apply_content_placement(content_placement_shiftnode, topology)
+    apply_content_placement(content_placement, topology)
 
 @register_content_placement('WEIGHTED')
 def weighted_content_placement(topology, contents, source_weights, seed=None):

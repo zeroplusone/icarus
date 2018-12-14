@@ -47,10 +47,7 @@ IS_BASELINE = True
 READ_FROM_DATA = False
 
 # Set topology
-if IS_BASELINE:
-        experiment['topology']['name'] = 'BASELINE'
-else:
-        experiment['topology']['name'] = 'CCF_SCALE'
+experiment['topology']['name'] = 'CCF_SCALE'
 experiment['topology']['n'] = source_number
 # experiment['topology']['delay'] = 1
 
@@ -71,7 +68,7 @@ if IS_BASELINE:
 else:
         experiment['cache_placement']['name'] = 'CCF'
         experiment['cache_placement']['cache_allocation'] = [0.1, 0.3, 0.5, 0.1]
-experiment['cache_placement']['network_cache'] = 0.01
+experiment['cache_placement']['network_cache'] = 0.001
 
 # Set content placement
 if READ_FROM_DATA:

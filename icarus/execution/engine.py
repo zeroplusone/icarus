@@ -83,7 +83,6 @@ def get_ug_provider(workload, view, topology, read_from_data):
     if read_from_data:
         with open ('record_workload_pdf', 'rb') as fp:
             content_pdf = pickle.load(fp)
-        n_source = len(topology.sources())
     else:
         content_pdf = workload.zipf._pdf
         with open('record_workload_pdf', 'wb') as fp:
@@ -97,8 +96,6 @@ def get_ug_provider(workload, view, topology, read_from_data):
     # provider_pdf = [0] * len(topology.sources())
     provider_pdf = {}      
     for content, provider in content_source.items():
-        if read_from_data:
-            provider = provider + n_source - 1
         if not provider_pdf.has_key(provider):
             provider_pdf[provider] = 0.0
         provider_pdf[provider] += content_pdf[content-1]
@@ -122,7 +119,7 @@ def get_ug_provider(workload, view, topology, read_from_data):
     #     'The user group send request uniformly'
     #     user_pdf = [1.0/len(topology.receivers())] * len(topology.receivers())
     # print(user_pdf)
-    
+
     # user_provider = []
     # for provider, ratio in provider_pdf.items():
     #     tmp_list = []

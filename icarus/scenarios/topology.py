@@ -35,8 +35,7 @@ __all__ = [
         'topology_garr',
         'topology_rocketfuel_latency',
         'topology_ccf',
-        'topology_ccf_scale',
-        'topology_baseline'
+        'topology_ccf_scale'
            ]
 
 
@@ -878,38 +877,6 @@ def topology_ccf_scale(n=2, delay=1, **kwargs):
     receivers = [0]
     routers = range(1, n+1)
     sources = range(n+1, 2*n+1)
-    topology.graph['icr_candidates'] = set(routers)
-    for v in sources:
-        fnss.add_stack(topology, v, 'source')
-    for v in receivers:
-        fnss.add_stack(topology, v, 'receiver')
-    for v in routers:
-        fnss.add_stack(topology, v, 'router')
-    # set weights and delays on all links
-    fnss.set_weights_constant(topology, 1.0)
-    fnss.set_delays_constant(topology, delay, 'ms')
-    # label links as internal or external
-    for u, v in topology.edges():
-        topology.adj[u][v]['type'] = 'internal'
-    return IcnTopology(topology)
-
-@register_topology_factory('BASELINE')
-def topology_baseline(n=2, delay=1, **kwargs):
-    """Return a baseline topology with n source
-
-    Parameters
-    ----------
-    n : int (>=1)
-        The number of source nodes
-    Returns
-    -------
-    topology : IcnTopology
-        The topology object
-    """
-    topology = fnss.two_tier_topology(1, 1, n)
-    receivers = [0]
-    routers = [1]
-    sources = range(2, n+2)
     topology.graph['icr_candidates'] = set(routers)
     for v in sources:
         fnss.add_stack(topology, v, 'source')
