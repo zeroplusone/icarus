@@ -19,7 +19,7 @@ PARALLEL_EXECUTION = True
 N_PROCESSES = cpu_count()
 
 # Number of times each experiment is replicated
-N_REPLICATIONS = 5
+N_REPLICATIONS = 1
 
 # Granularity of caching.
 # Currently, only OBJECT is supported

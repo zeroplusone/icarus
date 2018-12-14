@@ -59,7 +59,7 @@ experiment['workload'] = {
                        }
 
 # Set cache placement
-experiment['cache_placement']['name'] = 'UNIFORM'
+experiment['cache_placement']['name'] = 'TEST'
 experiment['cache_placement']['network_cache'] = 0.01
 
 # Set content placement

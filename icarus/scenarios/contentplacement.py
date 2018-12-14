@@ -5,6 +5,7 @@ source nodes.
 """
 import random
 import collections
+import pickle
 
 from fnss.util import random_from_pdf
 from icarus.registry import register_content_placement
@@ -53,11 +54,15 @@ def uniform_content_placement(topology, contents, seed=None):
     A deterministic placement of objects (e.g., for reproducing results) can be
     achieved by using a fix seed value
     """
-    random.seed(seed)
-    source_nodes = get_sources(topology)
-    content_placement = collections.defaultdict(set)
-    for c in contents:
-        content_placement[random.choice(source_nodes)].add(c)
+    # random.seed(seed)
+    # source_nodes = get_sources(topology)
+    # content_placement = collections.defaultdict(set)
+    # for c in contents:
+    #     content_placement[random.choice(source_nodes)].add(c)
+    # with open('outfile_content', 'wb') as fp:
+    #     pickle.dump(content_placement, fp)
+    with open ('outfile_content', 'rb') as fp:
+        content_placement = pickle.load(fp)
     apply_content_placement(content_placement, topology)
 
 
