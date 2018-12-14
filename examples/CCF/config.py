@@ -32,7 +32,7 @@ RESULTS_FORMAT = 'PICKLE'
 
 # List of metrics to be measured in the experiments
 # The implementation of data collectors are located in ./icaurs/execution/collectors.py
-DATA_COLLECTORS = ['CACHE_HIT_RATIO', 'LATENCY', 'PATH_STRETCH', 'LINK_LOAD', 'CCF']
+DATA_COLLECTORS = ['CACHE_HIT_RATIO', 'LATENCY', 'PATH_STRETCH', 'LINK_LOAD']
 
 # Queue of experiments
 EXPERIMENT_QUEUE = deque()
@@ -40,16 +40,20 @@ EXPERIMENT_QUEUE = deque()
 # Create experiment
 experiment = Tree()
 
+# CCF source number
+source_number = 3
+
 # Set topology
-experiment['topology']['name'] = 'CCF'
-# experiment['topology']['n'] = 3
+# experiment['topology']['name'] = 'CCF_SCALE'
+experiment['topology']['name'] = 'BASELINE'
+experiment['topology']['n'] = source_number
 # experiment['topology']['delay'] = 1
 
 
 # Set workload
 experiment['workload'] = {
          'name':       'STATIONARY',
-         'n_contents': 10 ** 5,
+         'n_contents': 4,
          'n_warmup':   10 ** 2,
          'n_measured': 4 * 10 ** 2,
          'alpha':      1.0,
@@ -65,8 +69,9 @@ experiment['cache_placement']['network_cache'] = 0.0
 
 
 # Set content placement
-experiment['content_placement']['name'] = 'UNIFORM'
-# experiment['content_placement']['name'] = 'DATA'
+# experiment['content_placement']['name'] = 'UNIFORM'
+experiment['content_placement']['name'] = 'DATA_TO_CCF'
+experiment['content_placement']['n'] = source_number
 
 # If True, read workload and content placement from data 
 READ_FROM_DATA = False

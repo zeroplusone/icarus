@@ -1,0 +1,55 @@
+<topology linkdefault="undirected">
+  <property name="type" type="string">two_tier</property>
+  <property name="name" type="string">two_tier_topology(1,1,4)</property>
+  <node id="0" id.type="int">
+    <property name="tier" type="string">core</property>
+    <property name="type" type="string">switch</property>
+    <property name="bipartite" type="int">0</property>
+  </node>
+  <node id="1" id.type="int">
+    <property name="tier" type="string">edge</property>
+    <property name="type" type="string">switch</property>
+    <property name="bipartite" type="int">1</property>
+  </node>
+  <node id="2" id.type="int">
+    <property name="tier" type="string">leaf</property>
+    <property name="type" type="string">host</property>
+  </node>
+  <node id="3" id.type="int">
+    <property name="tier" type="string">leaf</property>
+    <property name="type" type="string">host</property>
+  </node>
+  <node id="4" id.type="int">
+    <property name="tier" type="string">leaf</property>
+    <property name="type" type="string">host</property>
+  </node>
+  <node id="5" id.type="int">
+    <property name="tier" type="string">leaf</property>
+    <property name="type" type="string">host</property>
+  </node>
+  <link>
+    <from type="int">0</from>
+    <to type="int">1</to>
+    <property name="type" type="string">core_edge</property>
+  </link>
+  <link>
+    <from type="int">1</from>
+    <to type="int">2</to>
+    <property name="type" type="string">edge_leaf</property>
+  </link>
+  <link>
+    <from type="int">1</from>
+    <to type="int">3</to>
+    <property name="type" type="string">edge_leaf</property>
+  </link>
+  <link>
+    <from type="int">1</from>
+    <to type="int">4</to>
+    <property name="type" type="string">edge_leaf</property>
+  </link>
+  <link>
+    <from type="int">1</from>
+    <to type="int">5</to>
+    <property name="type" type="string">edge_leaf</property>
+  </link>
+</topology>

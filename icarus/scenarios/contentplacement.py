@@ -63,8 +63,8 @@ def uniform_content_placement(topology, contents, seed=None):
         pickle.dump(content_placement, fp)
     apply_content_placement(content_placement, topology)
 
-@register_content_placement('DATA')
-def content_placement_from_data (topology, contents, seed=None):
+@register_content_placement('DATA_TO_CCF')
+def content_placement_from_data (topology, contents, n, seed=None):
     """Places content objects to source nodes according to data 'outfile_content'.
 
     Parameters
@@ -89,7 +89,10 @@ def content_placement_from_data (topology, contents, seed=None):
 
     with open ('outfile_content', 'rb') as fp:
         content_placement = pickle.load(fp)
-    apply_content_placement(content_placement, topology)
+    content_placement_shiftnode = {}
+    for key, value in content_placement.items():
+        content_placement_shiftnode[key+n-1] = value
+    apply_content_placement(content_placement_shiftnode, topology)
 
 @register_content_placement('WEIGHTED')
 def weighted_content_placement(topology, contents, source_weights, seed=None):
