@@ -500,7 +500,7 @@ class PathStretchCollector(DataCollector):
             results['CDF_CONTENT'] = cdf(self.cont_stretch_data)
         return results
 
-@register_data_collector('DEMAND')
+@register_data_collector('CCF')
 class DemandCollector(DataCollector):
     """Collector calculate the table between user group and provider with the information about content location
     """ 
@@ -515,10 +515,20 @@ class DemandCollector(DataCollector):
             Stream on which debug collector writes
         """
         self.view = view
+        self.path_list = []
+
+    @inheritdoc(DataCollector)
+    def start_session(self, timestamp, receiver, content):
+        self.receiver = receiver
+        self.source = self.view.content_source(content)
+
+    @inheritdoc(DataCollector)
+    def end_session(self, success=True):
+        self.path_list.append(self.view.shortest_path(self.receiver, self.source))
 
     @inheritdoc(DataCollector)
     def results(self):
-        results = Tree({'CONTENT_SOURCE': self.view.model.content_source})
+        results = Tree({'PATH_LIST': self.path_list})
         return results
 
 @register_data_collector('DUMMY')

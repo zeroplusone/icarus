@@ -32,13 +32,10 @@ RESULTS_FORMAT = 'PICKLE'
 
 # List of metrics to be measured in the experiments
 # The implementation of data collectors are located in ./icaurs/execution/collectors.py
-DATA_COLLECTORS = ['CACHE_HIT_RATIO', 'LATENCY', 'PATH_STRETCH', 'LINK_LOAD']
+DATA_COLLECTORS = ['CACHE_HIT_RATIO', 'LATENCY', 'PATH_STRETCH', 'LINK_LOAD', 'CCF']
 
 # Queue of experiments
 EXPERIMENT_QUEUE = deque()
-
-# If True, read workload and content placement from data 
-READ_FROM_DATA = True
 
 # Create experiment
 experiment = Tree()
@@ -60,12 +57,19 @@ experiment['workload'] = {
         }
 
 # Set cache placement
-experiment['cache_placement']['name'] = 'CCF'
-experiment['cache_placement']['network_cache'] = 0.001
-experiment['cache_placement']['cache_allocation'] = [0.9, 0.1]
+# experiment['cache_placement']['name'] = 'CCF'
+# experiment['cache_placement']['network_cache'] = 0.0
+# experiment['cache_placement']['cache_allocation'] = [0.9, 0.1]
+experiment['cache_placement']['name'] = 'UNIFORM'
+experiment['cache_placement']['network_cache'] = 0.0
+
 
 # Set content placement
-experiment['content_placement']['name'] = 'DATA'
+experiment['content_placement']['name'] = 'UNIFORM'
+# experiment['content_placement']['name'] = 'DATA'
+
+# If True, read workload and content placement from data 
+READ_FROM_DATA = False
 
 # Set cache replacement policy
 experiment['cache_policy']['name'] = 'LRU'
