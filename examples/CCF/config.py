@@ -73,10 +73,10 @@ experiment['cache_placement']['network_cache'] = 0.001
 # Set content placement
 if READ_FROM_DATA:
         experiment['content_placement']['name'] = 'DATA_TO_CCF'
-        experiment['content_placement']['n'] = source_number
 else:
         # experiment['content_placement']['name'] = 'UNIFORM'
         experiment['content_placement']['name'] = 'ZIPF'
+        experiment['content_placement']['alpha'] = 2
         # experiment['content_placement']['name'] = 'WEIGHTED'
         # experiment['content_placement']['source_weights'] = {5: 0.5, 6: 0.15, 7: 0.1, 8: 0.25}
 
