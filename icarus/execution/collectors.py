@@ -424,6 +424,8 @@ class CacheHitRatioCollector(DataCollector):
                 self.per_node_server_hits[v] /= n_sess
             results['PER_NODE_CACHE_HIT_RATIO'] = self.per_node_cache_hits
             results['PER_NODE_SERVER_HIT_RATIO'] = self.per_node_server_hits
+            results['SUM_CACHE_HIT_RATIO'] = sum(self.per_node_cache_hits.values())
+            results['SUM_SERVER_HIT_RATIO'] = sum(self.per_node_server_hits.values())
         return results
 
 
