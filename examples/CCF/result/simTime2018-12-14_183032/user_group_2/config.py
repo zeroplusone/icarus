@@ -67,7 +67,7 @@ if IS_BASELINE:
         experiment['cache_placement']['name'] = 'UNIFORM'
 else:
         experiment['cache_placement']['name'] = 'CCF'
-        experiment['cache_placement']['cache_allocation'] = [0.605739105,0.1205850975,0.0803862863,0.0670866413,0.0182906091,0.019334881,0.0125991597,0.0545150414,0.0143303334,0.0071328489]
+        experiment['cache_placement']['cache_allocation'] = [0,0.333333333,0,0,0,0.333333333,0,0,0,0.333333333]
 experiment['cache_placement']['network_cache'] = 0.001
 
 # Set content placement
