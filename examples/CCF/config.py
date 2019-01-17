@@ -41,7 +41,7 @@ EXPERIMENT_QUEUE = deque()
 experiment = Tree()
 
 # CCF settings 
-source_number = 10
+source_number = 100
 IS_BASELINE = True
 # If True, read workload and content placement from data 
 READ_FROM_DATA = False

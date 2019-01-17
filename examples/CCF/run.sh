@@ -13,6 +13,9 @@ resultPath="result/simTime"$date
 echo "start simulation at "$date"..."
 echo `mkdir $resultPath`
 
+# runTime = #userGroup = #content_provider
+sed -i '' "s/source_number[[:space:]]=[[:space:]].*/source_number = $1/g" config.py
+
 for((i=0;i<$runTime;i=i+1))
 do
     icarus run --results result.pickle config.py >> $resultPath/"source_popularity_list.txt"
