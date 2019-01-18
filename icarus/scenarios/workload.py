@@ -21,6 +21,7 @@ import random
 import csv
 
 import networkx as nx
+import numpy as np
 
 from icarus.tools import TruncatedZipfDist
 from icarus.registry import register_workload
@@ -84,14 +85,14 @@ class StationaryWorkload(object):
         dictionary of event attributes.
     """
     def __init__(self, topology, n_contents, alpha, beta=0, rate=1.0,
-                    n_warmup=10 ** 5, n_measured=4 * 10 ** 5, seed=None, **kwargs):
+                    n_warmup=10 ** 5, n_measured=4 * 10 ** 5, seed=None, is_random=False, **kwargs):
         if alpha < 0:
             raise ValueError('alpha must be positive')
         if beta < 0:
             raise ValueError('beta must be positive')
         self.receivers = [v for v in topology.nodes()
                      if topology.node[v]['stack'][0] == 'receiver']
-        self.zipf = TruncatedZipfDist(alpha, n_contents)
+        self.zipf = TruncatedZipfDist(alpha, n_contents, is_random=is_random)
         self.n_contents = n_contents
         self.contents = range(1, n_contents + 1)
         self.alpha = alpha

@@ -41,7 +41,7 @@ EXPERIMENT_QUEUE = deque()
 experiment = Tree()
 
 # CCF settings 
-source_number = 100
+source_number = 10
 IS_BASELINE = True
 # If True, read workload and content placement from data 
 READ_FROM_DATA = False
@@ -58,8 +58,9 @@ experiment['workload'] = {
          'n_contents': 10 ** 5,
          'n_warmup':   10 ** 5,
          'n_measured': 2 * 10 ** 5,
-         'alpha':      1.0,
-         'rate':       1
+         'alpha':      2.0,
+         'rate':       1,
+         'is_random':   True
         }
 
 # Set cache placement
@@ -74,9 +75,10 @@ experiment['cache_placement']['network_cache'] = 0.001
 if READ_FROM_DATA:
         experiment['content_placement']['name'] = 'DATA_TO_CCF'
 else:
-        # experiment['content_placement']['name'] = 'UNIFORM'
-        experiment['content_placement']['name'] = 'ZIPF'
-        experiment['content_placement']['alpha'] = 2
+        experiment['content_placement']['name'] = 'UNIFORM'
+        # experiment['content_placement']['name'] = 'ZIPF'
+        # experiment['content_placement']['alpha'] = 2
+        # experiment['content_placement']['is_random'] = True
         # experiment['content_placement']['name'] = 'WEIGHTED'
         # experiment['content_placement']['source_weights'] = {5: 0.5, 6: 0.15, 7: 0.1, 8: 0.25}
 

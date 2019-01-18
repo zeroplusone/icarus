@@ -24,7 +24,7 @@ else
             sed -i '' "s/.*cache_allocation.*/        experiment['cache_placement']['cache_allocation'] = $allocation/g" $userGroupPath"/config.py"
             
             dirname=$rootPath"/"$userGroupPath
-            (cd $dirname && icarus run --results result.pickle config.py > "source_popularity_list.txt" && icarus results print result.pickle > "../"$allocationPath"_result_"$i".txt")
+            (cd $dirname && icarus run --results result.pickle config.py > $allocationPath"_source_popularity_list.txt" && icarus results print result.pickle > "../"$allocationPath"_result_"$i".txt")
             # icarus results print $userGroupPath/result.pickle > $userGroupPath"/result_"$i".txt"
         done
     fi

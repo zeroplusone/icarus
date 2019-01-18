@@ -27,7 +27,7 @@ class DiscreteDist(object):
     {1, ..., N}. This definition of discrete distribution.
     """
 
-    def __init__(self, pdf, seed=None):
+    def __init__(self, pdf, seed=None, is_random=False):
         """
         Constructor
 
@@ -42,6 +42,8 @@ class DiscreteDist(object):
             raise ValueError('The sum of pdf values must be equal to 1')
         random.seed(seed)
         self._pdf = np.asarray(pdf)
+        if is_random:
+            np.random.shuffle(self._pdf)
         self._cdf = np.cumsum(self._pdf)
         # set last element of the CDF to 1.0 to avoid rounding errors
         self._cdf[-1] = 1.0
@@ -95,7 +97,7 @@ class TruncatedZipfDist(DiscreteDist):
     a finite population, which can hence take values of alpha > 0.
     """
 
-    def __init__(self, alpha=1.0, n=1000, seed=None):
+    def __init__(self, alpha=1.0, n=1000, seed=None, is_random=False):
         """Constructor
 
         Parameters
@@ -106,6 +108,7 @@ class TruncatedZipfDist(DiscreteDist):
             The size of population
         seed : any hashable type, optional
             The seed to be used for random number generation
+        is_Random: the pdf of zipf is not in order if this value is True
         """
         # Validate parameters
         if alpha <= 0:
@@ -117,7 +120,7 @@ class TruncatedZipfDist(DiscreteDist):
         pdf = np.arange(1.0, n + 1.0) ** -alpha
         pdf /= np.sum(pdf)
         self._alpha = alpha
-        super(TruncatedZipfDist, self).__init__(pdf, seed)
+        super(TruncatedZipfDist, self).__init__(pdf, seed, is_random)
 
     @property
     def alpha(self):
