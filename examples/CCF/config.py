@@ -66,13 +66,13 @@ if IS_ZIPF:
                 }
 else:
         experiment['workload'] = {
-        'name':       'NORMAL',
-        'n_contents': 10 ** 5,
-        'n_warmup':   10 ** 5,
-        'n_measured': 2 * 10 ** 5,
-        'rate':       1,
-        'is_random':   True
-        }
+                'name':       'NORMAL',
+                'n_contents': 10 ** 5,
+                'n_warmup':   10 ** 5,
+                'n_measured': 2 * 10 ** 5,
+                'rate':       1,
+                'is_random':   True
+                }
 
 # Set cache placement
 if IS_BASELINE:
@@ -86,12 +86,16 @@ experiment['cache_placement']['network_cache'] = 0.001
 if READ_FROM_DATA:
         experiment['content_placement']['name'] = 'DATA_TO_CCF'
 else:
-        experiment['content_placement']['name'] = 'UNIFORM'
-        # experiment['content_placement']['name'] = 'ZIPF'
-        # experiment['content_placement']['alpha'] = 2
-        # experiment['content_placement']['is_random'] = True
-        # experiment['content_placement']['name'] = 'WEIGHTED'
-        # experiment['content_placement']['source_weights'] = {5: 0.5, 6: 0.15, 7: 0.1, 8: 0.25}
+        if IS_ZIPF:
+                experiment['content_placement']['name'] = 'UNIFORM'
+                # experiment['content_placement']['name'] = 'ZIPF'
+                # experiment['content_placement']['alpha'] = 2
+                # experiment['content_placement']['is_random'] = True
+        else:
+                experiment['content_placement']['name'] = 'NORMAL'
+                experiment['content_placement']['is_random'] = True
+                # experiment['content_placement']['name'] = 'WEIGHTED'
+                # experiment['content_placement']['source_weights'] = dic
 
 # Set cache replacement policy
 experiment['cache_policy']['name'] = 'LRU'

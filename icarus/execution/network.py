@@ -378,10 +378,11 @@ class NetworkModel(object):
                 if 'cache_size' in stack_props:
                     cache_size[node] = stack_props['cache_size']
             elif stack_name == 'source':
-                contents = stack_props['contents']
-                self.source_node[node] = contents
-                for content in contents:
-                    self.content_source[content] = node
+                if 'contents' in stack_props:
+                    contents = stack_props['contents']
+                    self.source_node[node] = contents
+                    for content in contents:
+                        self.content_source[content] = node
         if any(c < 1 for c in cache_size.values()):
             logger.warn('Some content caches have size equal to 0. '
                         'I am setting them to 1 and run the experiment anyway')
