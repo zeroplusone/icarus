@@ -9,7 +9,7 @@ from icarus.execution import NetworkModel, NetworkView, NetworkController, Colle
 from icarus.registry import DATA_COLLECTOR, STRATEGY
 from pprint import pprint
 import pickle
-
+import math
 __all__ = ['exec_experiment']
 
 
@@ -88,25 +88,25 @@ def get_ug_provider(workload, view, topology, read_from_data):
         with open('record_workload_pdf', 'wb') as fp:
             pickle.dump(content_pdf, fp)
 
-    "remove the weird additional digits ex. 0.32000000000006  (remove 6)"
-    for i in range(len(content_pdf)):
-        content_pdf[i] = round(content_pdf[i], 10)
     content_source = view.model.content_source
-    # print(content_source)
+    
     # provider_pdf = [0] * len(topology.sources())
-    provider_pdf = {}      
+    provider_pdf = {}   
     for content, provider in content_source.items():
         if not provider_pdf.has_key(provider):
             provider_pdf[provider] = 0.0
         provider_pdf[provider] += content_pdf[content-1]
+    # calibration
+    provider_pdf[provider_pdf.keys()[-1]] -= sum(provider_pdf.values())-1.0
+    print(sum(provider_pdf.values()))
 
     # print(content_pdf)
     # print(provider_pdf)
-    
 
-    user_provider = []
+    source_number = len(topology.sources())
+    user_provider = [0] * source_number
     for provider, ratio in provider_pdf.items():
-        user_provider.append(ratio)
+        user_provider[provider-source_number-1] = ratio
     print(user_provider)
     with open('provider_popularity', 'wb') as fp:
         pickle.dump(user_provider, fp)

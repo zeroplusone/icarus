@@ -47,6 +47,7 @@ class DiscreteDist(object):
             np.random.shuffle(self._pdf)
         self._cdf = np.cumsum(self._pdf)
         # set last element of the CDF to 1.0 to avoid rounding errors
+        self._pdf[-1] -= self._cdf[-1] - 1.0
         self._cdf[-1] = 1.0
 
     def __len__(self):
