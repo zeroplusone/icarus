@@ -8,11 +8,12 @@ import collections
 
 import numpy as np
 import scipy.stats as ss
-
+from scipy.stats import norm
 
 __all__ = [
        'DiscreteDist',
        'TruncatedZipfDist',
+       'TruncatedNormalDist',
        'means_confidence_interval',
        'proportions_confidence_interval',
        'cdf',
@@ -126,6 +127,35 @@ class TruncatedZipfDist(DiscreteDist):
     def alpha(self):
         return self._alpha
 
+class TruncatedNormalDist(DiscreteDist):
+    """Implements a normal distribution.
+    """
+
+    def __init__(self, n=1000, seed=None, is_random=False):
+        """Constructor
+
+        Parameters
+        ----------
+        alpha : float
+            The value of the alpha parameter (it must be positive)
+        n : int
+            The size of population
+        seed : any hashable type, optional
+            The seed to be used for random number generation
+        is_Random: the pdf of zipf is not in order if this value is True
+        """
+        # Validate parameters
+        if n < 0:
+            raise ValueError('n must be positive')
+        # This is the PDF i. e. the array that  contains the probability that
+        # content i + 1 is picked
+        # mean=0, std=1, take the range between +-6 std
+        pdf = [norm.cdf(-6+12.0/n*i)-norm.cdf(-6+12.0/n*(i-1)) for i in range(1,n+1)]
+        # calibration
+        pdf[0] = norm.cdf(-6+12.0/n)
+        pdf[-1] = 1-norm.cdf(-6+12.0/n*(n-1))
+        # print(pdf)
+        super(TruncatedNormalDist, self).__init__(pdf, seed, is_random)
 
 def means_confidence_interval(data, confidence=0.95):
     """Computes the confidence interval for a given set of means.

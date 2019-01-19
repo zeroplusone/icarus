@@ -24,11 +24,13 @@ import networkx as nx
 import numpy as np
 
 from icarus.tools import TruncatedZipfDist
+from icarus.tools import TruncatedNormalDist
 from icarus.registry import register_workload
 from pprint import pprint
 
 __all__ = [
         'StationaryWorkload',
+        'NormalWorkload',
         'GlobetraffWorkload',
         'TraceDrivenWorkload',
         'YCSBWorkload'
@@ -92,7 +94,7 @@ class StationaryWorkload(object):
             raise ValueError('beta must be positive')
         self.receivers = [v for v in topology.nodes()
                      if topology.node[v]['stack'][0] == 'receiver']
-        self.zipf = TruncatedZipfDist(alpha, n_contents, is_random=is_random)
+        self.dist = TruncatedZipfDist(alpha, n_contents, is_random=is_random)
         self.n_contents = n_contents
         self.contents = range(1, n_contents + 1)
         self.alpha = alpha
@@ -117,13 +119,88 @@ class StationaryWorkload(object):
                 receiver = random.choice(self.receivers)
             else:
                 receiver = self.receivers[self.receiver_dist.rv() - 1]
-            content = int(self.zipf.rv())
+            content = int(self.dist.rv())
             log = (req_counter >= self.n_warmup)
             event = {'receiver': receiver, 'content': content, 'log': log}
             yield (t_event, event)
             req_counter += 1
         raise StopIteration()
 
+
+@register_workload('NORMAL')
+class NormalWorkload(object):
+    """This function generates events on the fly, i.e. instead of creating an
+    event schedule to be kept in memory, returns an iterator that generates
+    events when needed.
+
+    This is useful for running large schedules of events where RAM is limited
+    as its memory impact is considerably lower.
+
+    These requests are Poisson-distributed while content popularity is
+    Zipf-distributed
+
+    All requests are mapped to receivers uniformly unless a positive *beta*
+    parameter is specified.
+
+    If a *beta* parameter is specified, then receivers issue requests at
+    different rates. The algorithm used to determine the requests rates for
+    each receiver is the following:
+     * All receiver are sorted in decreasing order of degree of the PoP they
+       are attached to. This assumes that all receivers have degree = 1 and are
+       attached to a node with degree > 1
+     * Rates are then assigned following a Zipf distribution of coefficient
+       beta where nodes with higher-degree PoPs have a higher request rate
+
+    Parameters
+    ----------
+    topology : fnss.Topology
+        The topology to which the workload refers
+    n_contents : int
+        The number of content object
+    alpha : float
+        The Zipf alpha parameter
+    beta : float, optional
+        Parameter indicating
+    rate : float, optional
+        The mean rate of requests per second
+    n_warmup : int, optional
+        The number of warmup requests (i.e. requests executed to fill cache but
+        not logged)
+    n_measured : int, optional
+        The number of logged requests after the warmup
+
+    Returns
+    -------
+    events : iterator
+        Iterator of events. Each event is a 2-tuple where the first element is
+        the timestamp at which the event occurs and the second element is a
+        dictionary of event attributes.
+    """
+
+    def __init__(self, topology, n_contents, rate=1.0, n_warmup=10 ** 5, n_measured=4 * 10 ** 5, seed=None, is_random=False, **kwargs):
+        self.receivers = [v for v in topology.nodes()
+                          if topology.node[v]['stack'][0] == 'receiver']
+        self.dist = TruncatedNormalDist(n_contents, is_random=is_random)
+        self.n_contents = n_contents
+        self.contents = range(1, n_contents + 1)
+        self.rate = rate
+        self.n_warmup = n_warmup
+        self.n_measured = n_measured
+        random.seed(seed)
+        self.topology = topology
+
+    def __iter__(self):
+        req_counter = 0
+        t_event = 0.0
+        while req_counter < self.n_warmup + self.n_measured:
+            t_event += (random.expovariate(self.rate))
+            receiver = random.choice(self.receivers)
+            content = int(self.dist.rv())
+            log = (req_counter >= self.n_warmup)
+            event = {'receiver': receiver, 'content': content, 'log': log}
+            yield (t_event, event)
+            req_counter += 1
+        raise StopIteration()
 
 @register_workload('GLOBETRAFF')
 class GlobetraffWorkload(object):

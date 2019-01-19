@@ -45,7 +45,7 @@ source_number = 10
 IS_BASELINE = True
 # If True, read workload and content placement from data 
 READ_FROM_DATA = False
-
+IS_ZIPF = False
 # Set topology
 experiment['topology']['name'] = 'CCF_SCALE'
 experiment['topology']['n'] = source_number
@@ -53,14 +53,25 @@ experiment['topology']['n'] = source_number
 
 
 # Set workload
-experiment['workload'] = {
-         'name':       'STATIONARY',
-         'n_contents': 10 ** 5,
-         'n_warmup':   10 ** 5,
-         'n_measured': 2 * 10 ** 5,
-         'alpha':      2.0,
-         'rate':       1,
-         'is_random':   True
+# ZIPF
+if IS_ZIPF:
+        experiment['workload'] = {
+                'name':       'STATIONARY',
+                'n_contents': 10 ** 5,
+                'n_warmup':   10 ** 5,
+                'n_measured': 2 * 10 ** 5,
+                'alpha':      2.0,
+                'rate':       1,
+                'is_random':   True
+                }
+else:
+        experiment['workload'] = {
+        'name':       'NORMAL',
+        'n_contents': 10 ** 5,
+        'n_warmup':   10 ** 5,
+        'n_measured': 2 * 10 ** 5,
+        'rate':       1,
+        'is_random':   True
         }
 
 # Set cache placement

@@ -84,7 +84,7 @@ def get_ug_provider(workload, view, topology, read_from_data):
         with open ('record_workload_pdf', 'rb') as fp:
             content_pdf = pickle.load(fp)
     else:
-        content_pdf = workload.zipf._pdf
+        content_pdf = workload.dist._pdf
         with open('record_workload_pdf', 'wb') as fp:
             pickle.dump(content_pdf, fp)
 
