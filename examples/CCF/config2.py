@@ -41,11 +41,11 @@ EXPERIMENT_QUEUE = deque()
 experiment = Tree()
 
 # CCF settings 
-source_number = 10
+source_number = 100
 IS_BASELINE = False
 # If True, read workload and content placement from data 
 READ_FROM_DATA = True
-
+IS_ZIPF = False
 # Set topology
 experiment['topology']['name'] = 'CCF_SCALE'
 experiment['topology']['n'] = source_number
@@ -53,29 +53,49 @@ experiment['topology']['n'] = source_number
 
 
 # Set workload
-experiment['workload'] = {
-         'name':       'STATIONARY',
-         'n_contents': 10 ** 5,
-         'n_warmup':   10 ** 5,
-         'n_measured': 2 * 10 ** 5,
-         'alpha':      1.0,
-         'rate':       1
-        }
+# ZIPF
+if IS_ZIPF:
+        experiment['workload'] = {
+                'name':       'STATIONARY',
+                'n_contents': 10 ** 5,
+                'n_warmup':   10 ** 5,
+                'n_measured': 2 * 10 ** 5,
+                'alpha':      2.0,
+                'rate':       1,
+                'is_random':   True
+                }
+else:
+        experiment['workload'] = {
+                'name':       'NORMAL',
+                'n_contents': 10 ** 5,
+                'n_warmup':   10 ** 5,
+                'n_measured': 2 * 10 ** 5,
+                'rate':       1,
+                'is_random':   True
+                }
 
 # Set cache placement
 if IS_BASELINE:
         experiment['cache_placement']['name'] = 'UNIFORM'
 else:
         experiment['cache_placement']['name'] = 'CCF'
-        experiment['cache_placement']['cache_allocation'] = [replacement]
-experiment['cache_placement']['network_cache'] = 0.001
+        experiment['cache_placement']['cache_allocation'] = [0.1, 0.3, 0.5, 0.1]
+experiment['cache_placement']['network_cache'] = 0.1
 
 # Set content placement
 if READ_FROM_DATA:
         experiment['content_placement']['name'] = 'DATA_TO_CCF'
 else:
-        experiment['content_placement']['name'] = 'ZIPF'
-        experiment['content_placement']['alpha'] = 2
+        if IS_ZIPF:
+                experiment['content_placement']['name'] = 'UNIFORM'
+                # experiment['content_placement']['name'] = 'ZIPF'
+                # experiment['content_placement']['alpha'] = 2
+                # experiment['content_placement']['is_random'] = True
+        else:
+                experiment['content_placement']['name'] = 'NORMAL'
+                experiment['content_placement']['is_random'] = True
+                # experiment['content_placement']['name'] = 'WEIGHTED'
+                # experiment['content_placement']['source_weights'] = dic
 
 # Set cache replacement policy
 experiment['cache_policy']['name'] = 'LRU'

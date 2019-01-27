@@ -13,13 +13,15 @@ else
         echo $resultPath" not exist."
     else
         echo "start CCF simulation on "$resultPath
+        sed -i '' "s/source_number[[:space:]]=[[:space:]].*/source_number = $1/g" config2.py
+
         for((i=0;i<$runTime;i=i+1))
         do
             userGroupPath=$resultPath"/user_group_"$i
             cp config2.py $userGroupPath/config.py
-            startLine=$(( 10*$i+1 ))
-            endLine=$(( 10*($i+1) ))
-            allocation=`sed -n "${startLine},${endLine} p" $allocationPath | awk '!(NR%10){print p","$0}{p=p","$0}' `
+            startLine=$(( $runTime*$i+1 ))
+            endLine=$(( $runTime*($i+1) ))
+            allocation=`sed -n "${startLine},${endLine} p" $allocationPath | awk '!(NR%100){print p","$0}{p=p","$0}' `
             allocation='['${allocation:1}']'
             sed -i '' "s/.*cache_allocation.*/        experiment['cache_placement']['cache_allocation'] = $allocation/g" $userGroupPath"/config.py"
             

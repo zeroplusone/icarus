@@ -67,7 +67,7 @@ if IS_ZIPF:
 else:
         experiment['workload'] = {
                 'name':       'NORMAL',
-                'n_contents': 10 ** 5,
+                'n_contents': 10 ** 7,
                 'n_warmup':   10 ** 5,
                 'n_measured': 2 * 10 ** 5,
                 'rate':       1,
