@@ -24,7 +24,6 @@ else
             do
                 arr[$k]=0
             done
-
             for ((j=0;j<$runTime;j=j+1))
             do
                 awkKeyIndex=$((3+2*$j))
