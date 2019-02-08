@@ -345,7 +345,6 @@ def ccf_cache_placement(topology, cache_budget, cache_allocation, **kwargs):
     icr_candidates = topology.graph['icr_candidates']
     # cache_size = iround(cache_budget / len(icr_candidates))
     i=0
-    print(cache_allocation)
     cache_size_list = cache_allocation
     for v in icr_candidates:
         topology.node[v]['stack'][1]['cache_size'] = iround(cache_budget * cache_size_list[i])

@@ -98,7 +98,6 @@ def get_ug_provider(workload, view, topology, read_from_data):
         provider_pdf[provider] += content_pdf[content-1]
     # calibration
     provider_pdf[provider_pdf.keys()[-1]] -= sum(provider_pdf.values())-1.0
-    print(sum(provider_pdf.values()))
 
     # print(content_pdf)
     # print(provider_pdf)

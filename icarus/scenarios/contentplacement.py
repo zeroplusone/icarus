@@ -119,6 +119,15 @@ def weighted_content_placement(topology, contents, source_weights, seed=None):
     achieved by using a fix seed value
     """
 
+    # IF source_weights is list
+    if isinstance(source_weights, list):
+        n_sources = len(topology.sources())
+        source_weights_dic = {}
+        for i in range(n_sources):
+            source_weights_dic[n_sources+1+i] = source_weights[i]
+        source_weight = source_weights_dic
+    # END IF
+    
     random.seed(seed)
     norm_factor = float(sum(source_weights.values()))
     source_pdf = dict((k, v / norm_factor) for k, v in source_weights.items())
