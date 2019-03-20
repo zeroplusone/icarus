@@ -1,47 +1,81 @@
 #/bin/sh
 
 # check arguments
-if [ $# -ne 2 ]; then
+if [ $# -ne 3 ] && [ $# -ne 2 ]; then
     echo "Please enter #content provider as the first argument."
     echo "Please enter #user group as the second argument"
+    echo "To skip baseline simulation, the third arguement, name of simulation directory (ex. simTime2019-03-19_154133), is required."
 else
     # initialize variables
     contentProvider=$1
     userGroup=$2
     rootPath=`pwd`
     experimentPath="content_provider/"$contentProvider"-"$userGroup
-    date=`date +%Y-%m-%d_%H%M%S`
-    resultPath=$experimentPath"/simTime"$date
-    demandPath=$experimentPath"/"$contentProvider"-"$userGroup"-total.txt"
+    resultPath=$experimentPath
 
     # Step 1. Run basedline experiment
-    if ! [ -f $demandPath ]; then
-        echo $demandPath" not exist."
-    else
-        echo "start baseline simulation at "$date"..."
-        echo `mkdir $resultPath`
+    if [ $# -eq 2 ]; then
+        date=`date +%Y-%m-%d_%H%M%S`
+        resultPath=$resultPath"/simTime"$date
+        demandPath=$experimentPath"/"$contentProvider"-"$userGroup"-total.txt"
+        if ! [ -f $demandPath ]; then
+            echo $demandPath" not exist."
+        else
+            echo "start baseline simulation at "$date"..."
+            echo `mkdir $resultPath`
 
-        for((i=0;i<$userGroup;i=i+1))
-        do
-            # awk -v con=10 -v user=100 -v key=0 '(NR%user==key){if($1==con){print con+$1":"$3}else{print con+$1":"$3}}' 10-100-total.txt
-            startLine=$(( $userGroup*$i+1 ))
-            endLine=$(( $userGroup*($i+1) ))
-            key=$(( $userGroup+1 ))
-            demand=`sed -n "${startLine},${endLine} p"  | awk -v key=$key '!(NR%100){print p","key+(NR-1)%100":"$0}{p=p","key+(NR-1)%100":"$0}' `
-            demand='{'${demand:1}'}'
-            sed -i '' "s/.*source_weights.*[[:space:]]=[[:space:]].*/                experiment['content_placement']['source_weights'] =  $demand/g" config.py
-        
-            icarus run --results result.pickle config.py >> $resultPath/"source_popularity_list.txt"
-            icarus results print result.pickle > $resultPath/"result_"$i".txt"
-            dataPath=$resultPath"/user_group_"$i
-            echo `mkdir $dataPath`
-            echo `mv record_workload $dataPath/`
-            echo `mv record_workload_pdf $dataPath/`
-            echo `mv record_content $dataPath/`
-            echo `mv provider_popularity $dataPath/`
+            sed -i '' "s/source_number[[:space:]]=[[:space:]].*/source_number = $contentProvider/g" config.py
 
-        done
+            for ((i=1;i<=$userGroup;i=i+1))
+            do
+                # transfer CRLF to LF
+                tr -d "\r" < $demandPath > tmp && mv tmp $demandPath
+                # create demand dictionary of each usergroup
+                demand=`awk -v cpN=$contentProvider -v ugN=$userGroup -v ugNow=$i 'BEGIN{ORS=","}(ugNow==$2){print cpN+$1":"$3}' $demandPath`
+                demand='{'${demand%?}'}'
+                # replace demand into config file
+                sed -i '' "s/.*source_weights.*[[:space:]]=[[:space:]].*/        experiment['content_placement']['source_weights'] =  $demand/g" config.py
+                # run simulation
+                icarus run --results result.pickle config.py >> $resultPath/"source_popularity_list.txt"
+                icarus results print result.pickle > $resultPath/"result_"$i".txt"
+                # store baseline data
+                dataPath=$resultPath"/user_group_"$i
+                echo `mkdir $dataPath`
+                echo `mv record_workload $dataPath/`
+                echo `mv record_workload_pdf $dataPath/`
+                echo `mv record_content $dataPath/`
+                echo `mv provider_popularity $dataPath/`
+            done
+
+            sed -i '' "s/.*source_weights.*[[:space:]]=[[:space:]].*/        experiment['content_placement']['source_weights'] = {}/g" config.py
+        fi
     fi
+
+
+    # Step 2. Run CCF experiment
+    if [ $# -eq 3 ]; then
+        resultPath=$resultPath"/"$3
+    fi
+    echo $resultPath
+    CCF_files=(`ls $experimentPath/*.tsv`)
+    for file in ${CCF_files[@]}
+    do
+        fileName=`cut -d / -f 3 <<< $file`
+        echo "start CCF simulation on "$resultPath" by using"$fileName
+        for ((i=1;i<=$userGroup;i=i+1))
+        do
+            # create CCF config.py
+            dataPath=$resultPath"/user_group_"$i
+            cp config.py $dataPath"/"
+            sed -i '' 's/IS_BASELINE[[:space:]]=[[:space:]].*/IS_BASELINE = False/g' $dataPath/config.py
+            allocation=`awk -v ugNow=$i 'BEGIN{ORS=","}($2==ugNow){print $3}' $file`
+            allocation='['${allocation%?}']'
+            sed -i '' "s/.*cache_allocation.*/        experiment['cache_placement']['cache_allocation'] = $allocation/g" $dataPath"/config.py"
+            
+            dirname=$rootPath"/"$dataPath
+            (cd $dirname && icarus run --results result.pickle config.py && icarus results print result.pickle > "../"$fileName"_result_"$i".txt")
+        done
+    done
 fi
 
 
